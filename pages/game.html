@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="../node_modules/newcar/dist/newcar.js"></script>
+  </head>
+  <body>
+    <canvas
+      id="game_canvas"
+      height="600"
+      width="800"
+      style="background-color: black"
+    ></canvas>
+    <script>
+      const { Car } = newcar;
+      const { Carobj, Text, Circle, MathImage } = newcar.object;
+
+      const data = {
+        version: "1.0",
+        tap: [
+          {
+            type: "onImage",
+            x: 80,
+          },
+        ],
+      };
+
+      const game = new Car(document.getElementById("game_canvas"), 60);
+
+      // Information
+
+      const title = new Text({
+        text: "title",
+        x: 5,
+        y: 580,
+        size: 20,
+        color: "white",
+      });
+
+      const combo = new Text({
+        text: "COMBO",
+        x: 400,
+        y: 20,
+        size: 15,
+        color: "white",
+        align: "center",
+      });
+
+      const comboNumber = new Text({
+        text: "114514",
+        x: 400,
+        y: 40,
+        size: 25,
+        color: "white",
+        align: "center",
+      });
+
+      const level = new Text({
+        text: "Lv.X IN",
+        x: 5,
+        y: 560,
+        size: 20,
+        color: "white",
+      });
+
+      // Spirits
+
+      const ball = new Circle({
+        radius: 10,
+        x: 0,
+        y: 0,
+        borderColor: "yellow",
+        fillColor: "yellow",
+      });
+
+      const axis = new Carobj({
+        x: 100,
+        y: 500,
+        children: [ball],
+      });
+
+      game.addObject(title);
+      game.addObject(level);
+      game.addObject(combo);
+      game.addObject(comboNumber);
+      game.addObject(axis);
+
+      const taps = data.tap.forEach((eachtap) => {
+        if (eachtap.type === "onImage") {
+          axis.addChild(
+            new Circle({
+              radius: 10,
+              x: eachtap.x,
+              y: 0,
+              borderColor: "white",
+              fillColor: "skyblue"
+            })
+          );
+        }
+      });
+
+      game.onUpdate((currentFrame) => {
+        ball.x = currentFrame;
+        ball.y = Math.sin(currentFrame * 0.1) * 50;
+        axis.x = -currentFrame + 100;
+        axis.y = -(Math.sin(currentFrame * 0.1) * 50) + 300;
+      });
+
+      game.startPlay();
+    </script>
+  </body>
+</html>
